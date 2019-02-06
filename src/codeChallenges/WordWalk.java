@@ -8,7 +8,8 @@ public class WordWalk {
   public static void main(String[] args) {
     HashSet<String> dict = new HashSet<String>();
     dict = DictionarySingleton.getDictionary();
-    searchPath("cat", "dog", dict);
+    LinkedList<String> path = searchPath("cat", "dog", dict);
+    System.out.println(path);
 
     /*
      * dict.add("cat".toLowerCase()); dict.add("cag".toLowerCase());
@@ -17,7 +18,7 @@ public class WordWalk {
      */
   }
 
-  public static void searchPath(String start, String end, HashSet<String> dict) {
+  public static LinkedList<String> searchPath(String start, String end, HashSet<String> dict) {
     start = start.toLowerCase();
     end = end.toLowerCase();
     LinkedList<String> wordQueue = new LinkedList<>();
@@ -35,6 +36,10 @@ public class WordWalk {
           currCharArr[i] = c;
 
           String newWord = new String(currCharArr);
+          if (end.equals(newWord)) {
+            endQueue.add(newWord);
+            return endQueue;
+          }
           if (dict.contains(newWord)) {
             wordQueue.add(newWord);
             endQueue.add(newWord);
@@ -43,7 +48,7 @@ public class WordWalk {
         }
       }
     }
-    System.out.println(endQueue);
+    return endQueue;
   }
 
 }
