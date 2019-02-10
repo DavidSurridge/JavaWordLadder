@@ -15,15 +15,15 @@ public class WordWalk {
     HashSet<String> dict = new HashSet<String>();
     dict = DictionarySingleton.getDictionary();
     System.out.println(dict.size());
-
-    LinkedList<String> path1 = findLadder("cat", "dog", dict);
+    // List<List<String>> noPath = findLadder("Oecanthus", "oecodomic", dict);
+    List<List<String>> path1 = findLadder("cat", "dog", dict);
     System.out.println(path1);
     System.out.println(path1.size());
   }
 
-  public static LinkedList<String> findLadder(String start, String end, HashSet<String> dict) {
+  public static List<List<String>> findLadder(String start, String end, HashSet<String> dict) {
 
-    // process inouts
+    // process inputs
     start = start.toLowerCase();
     end = end.toLowerCase();
     dict.add(start);
@@ -31,41 +31,59 @@ public class WordWalk {
 
     // Initialise tree variables
     Map<String, ArrayList<String>> wordTreeHierarchy = new HashMap<String, ArrayList<String>>();
-    Map<String, Integer> wordTreedistanceMeasure = new HashMap<String, Integer>();
-    wordTreedistanceMeasure.put(start, 0);
+    Map<String, Integer> wordTreeDistanceMeasure = new HashMap<String, Integer>();
+    wordTreeDistanceMeasure.put(start, 0);
     for (String s : dict) {
       wordTreeHierarchy.put(s, new ArrayList<String>());
     }
 
-    // Initialise word processor variables 
+    List<List<String>> results = new ArrayList<List<String>>();
+
+    BFS(start, end, wordTreeDistanceMeasure, wordTreeHierarchy, dict);
+
+    return results;
+  }
+
+  private static void BFS(String start, String end, Map<String, Integer> wordTreeDistanceMeasure,
+      Map<String, ArrayList<String>> wordTreeHierarchy, Set<String> dict) {
+
+    // Initialise word processor variables
     Queue<String> wordQueue = new LinkedList<String>();
     wordQueue.add(start);
 
-    LinkedList<String> endQueue = new LinkedList<>();
-    
-    endQueue.add(start);
-
+    // Build word tree
     while (!wordQueue.isEmpty()) {
-      String currWord = wordQueue.poll();
+      String queueWord = wordQueue.poll();
+      List<String> adjacentWords = getAdjacentWords(queueWord, dict);
 
-      for (int i = 0; i < currWord.length(); i++) {
-        char[] currCharArr = currWord.toCharArray();
-        for (char c = 'a'; c <= 'z'; c++) {
-          currCharArr[i] = c;
-
-          String newWord = new String(currCharArr);
-
-          if (dict.contains(newWord)) {
-            wordQueue.add(newWord);
-            endQueue.add(newWord);
-            dict.remove(newWord);
-          }
+      for (String adjWord : adjacentWords) {
+        wordTreeHierarchy.get(adjWord).add(queueWord);
+        if (!wordTreeDistanceMeasure.containsKey(adjWord)) {
+          wordTreeDistanceMeasure.put(adjWord, wordTreeDistanceMeasure.get(queueWord) + 1);
+          wordQueue.add(adjWord);
         }
       }
     }
-    return endQueue;
+
+    System.out.println(wordTreeDistanceMeasure);
+
   }
 
-  
+  public static ArrayList<String> getAdjacentWords(String word, Set<String> dict) {
+    ArrayList<String> list = new ArrayList<String>();
+    for (int i = 0; i < word.length(); i++) {
+      char[] currCharArr = word.toCharArray();
+      for (char c = 'a'; c <= 'z'; c++) {
+        currCharArr[i] = c;
+
+        String newWord = new String(currCharArr);
+        if (dict.contains(newWord)) {
+          list.add(newWord);
+        }
+      }
+    }
+
+    return list;
+  }
 
 }
