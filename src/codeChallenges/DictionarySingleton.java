@@ -14,10 +14,12 @@ public class DictionarySingleton {
   }
 
   public static HashSet<String> getDictionary() {
+
     if (dict.isEmpty()) {
       loadDictionary();
     }
-    return dict;
+
+    return new HashSet<String>(dict);
   }
 
   private static void loadDictionary() {
@@ -28,17 +30,11 @@ public class DictionarySingleton {
       String line = bufferedReader.readLine();
 
       while (line != null) {
-        dict.add(line);
+        dict.add(line.toLowerCase());
         line = bufferedReader.readLine();
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  public static void main(String[] args) {
-    HashSet<String> x = getDictionary();
-    System.out.println(x.size());
-
   }
 }
