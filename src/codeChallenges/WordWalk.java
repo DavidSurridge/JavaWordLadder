@@ -1,6 +1,7 @@
 package codeChallenges;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,10 +16,9 @@ public class WordWalk {
     HashSet<String> dict = new HashSet<String>();
     dict = DictionarySingleton.getDictionary();
     System.out.println(dict.size());
-    // List<List<String>> noPath = findLadder("Oecanthus", "oecodomic", dict);
+    List<List<String>> noPath = findLadder("Oecanthus", "oecodomic", dict);
     List<List<String>> path1 = findLadder("cat", "dog", dict);
-    System.out.println(path1);
-    System.out.println(path1.size());
+
   }
 
   public static List<List<String>> findLadder(String start, String end, HashSet<String> dict) {
@@ -40,7 +40,14 @@ public class WordWalk {
     List<List<String>> results = new ArrayList<List<String>>();
 
     BFS(start, end, wordTreeDistanceMeasure, wordTreeHierarchy, dict);
+    ArrayList<String> path = new ArrayList<String>();
+    backtrackSearchTreeForShortestRoute(start, end, wordTreeDistanceMeasure, wordTreeHierarchy, path, results);
 
+    if (results.size() == 0) {
+      System.out.println("there are no results");
+    } else {
+      System.out.print(results);
+    }
     return results;
   }
 
@@ -64,9 +71,24 @@ public class WordWalk {
         }
       }
     }
+  }
 
-    System.out.println(wordTreeDistanceMeasure);
-
+  private static void backtrackSearchTreeForShortestRoute(String start, String end,
+      Map<String, Integer> wordTreeDistanceMeasure, Map<String, ArrayList<String>> wordTreeHierarchy,
+      ArrayList<String> path, List<List<String>> rst) {
+    path.add(end);
+    if (end.equals(start)) {
+      Collections.reverse(path);
+      rst.add(new ArrayList<String>(path));
+      Collections.reverse(path);
+    } else {
+      for (String s : wordTreeHierarchy.get(end)) { // start back from all adjacent words of the end target
+        if (wordTreeDistanceMeasure.get(end) == wordTreeDistanceMeasure.get(s) + 1) {
+          backtrackSearchTreeForShortestRoute(start, s, wordTreeDistanceMeasure, wordTreeHierarchy, path, rst);
+        }
+      }
+    }
+    path.remove(path.size() - 1);
   }
 
   public static ArrayList<String> getAdjacentWords(String word, Set<String> dict) {
