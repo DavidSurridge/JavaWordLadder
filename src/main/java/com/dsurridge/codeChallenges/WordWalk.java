@@ -21,17 +21,17 @@ public class WordWalk {
     dict.add(end);
 
     // Initialise tree variables
-    Map<String, List<String>> wordTreeHierarchy = new HashMap<String, List<String>>();
-    Map<String, Integer> wordTreeDistanceMeasure = new HashMap<String, Integer>();
+    Map<String, List<String>> wordTreeHierarchy = new HashMap<>();
+    Map<String, Integer> wordTreeDistanceMeasure = new HashMap<>();
     wordTreeDistanceMeasure.put(start, 0);
     for (String s : dict) {
       wordTreeHierarchy.put(s, new ArrayList<String>());
     }
 
-    List<List<String>> results = new ArrayList<List<String>>();
+    List<List<String>> results = new ArrayList<>();
     breadthFirstSearchTreeBuilder(start, end, wordTreeDistanceMeasure, wordTreeHierarchy, dict);
 
-    ArrayList<String> path = new ArrayList<String>();
+    ArrayList<String> path = new ArrayList<>();
     backtrackSearchTreeForShortestRoute(start, end, wordTreeDistanceMeasure, wordTreeHierarchy, path, results);
 
     if (results.size() == 0) {
@@ -47,7 +47,7 @@ public class WordWalk {
       Set<String> dict) {
 
     // Initialise word processor variables
-    Queue<String> wordQueue = new LinkedList<String>();
+    Queue<String> wordQueue = new LinkedList<>();
     wordQueue.add(start);
 
     // Build word tree
@@ -88,7 +88,7 @@ public class WordWalk {
   }
 
   protected ArrayList<String> getAdjacentWords(String word, Set<String> dict) {
-    ArrayList<String> list = new ArrayList<String>();
+    ArrayList<String> list = new ArrayList<>();
     for (int i = 0; i < word.length(); i++) {
       char[] currCharArr = word.toCharArray();
       for (char c = 'a'; c <= 'z'; c++) {
