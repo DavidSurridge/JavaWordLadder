@@ -1,4 +1,4 @@
-package main.java.com.dsurridge.controller;
+package com.dsurridge.controller;
 
 import java.util.HashSet;
 import codeChallenges.WordWalk;
