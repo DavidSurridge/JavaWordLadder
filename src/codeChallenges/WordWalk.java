@@ -12,16 +12,7 @@ import java.util.Set;
 
 public class WordWalk {
 
-  public static void main(String[] args) {
-    HashSet<String> dict = new HashSet<String>();
-    dict = DictionarySingleton.getDictionary();
-    System.out.println(dict.size());
-    List<List<String>> noPath = findLadder("Oecanthus", "oecodomic", dict);
-    List<List<String>> path1 = findLadder("cat", "dog", dict);
-
-  }
-
-  public static List<List<String>> findLadder(String start, String end, HashSet<String> dict) {
+  public List<List<String>> findLadder(String start, String end, HashSet<String> dict) {
 
     // process inputs
     start = start.toLowerCase();
@@ -30,7 +21,7 @@ public class WordWalk {
     dict.add(end);
 
     // Initialise tree variables
-    Map<String, ArrayList<String>> wordTreeHierarchy = new HashMap<String, ArrayList<String>>();
+    Map<String, List<String>> wordTreeHierarchy = new HashMap<String, List<String>>();
     Map<String, Integer> wordTreeDistanceMeasure = new HashMap<String, Integer>();
     wordTreeDistanceMeasure.put(start, 0);
     for (String s : dict) {
@@ -38,21 +29,22 @@ public class WordWalk {
     }
 
     List<List<String>> results = new ArrayList<List<String>>();
+    breadthFirstSearchTreeBuilder(start, end, wordTreeDistanceMeasure, wordTreeHierarchy, dict);
 
-    BFS(start, end, wordTreeDistanceMeasure, wordTreeHierarchy, dict);
     ArrayList<String> path = new ArrayList<String>();
     backtrackSearchTreeForShortestRoute(start, end, wordTreeDistanceMeasure, wordTreeHierarchy, path, results);
 
     if (results.size() == 0) {
-      System.out.println("there are no results");
+      System.out.println("There are no results");
     } else {
-      System.out.print(results);
+      System.out.println(results);
     }
     return results;
   }
 
-  private static void BFS(String start, String end, Map<String, Integer> wordTreeDistanceMeasure,
-      Map<String, ArrayList<String>> wordTreeHierarchy, Set<String> dict) {
+  private void breadthFirstSearchTreeBuilder(String start, String end,
+      Map<String, Integer> wordTreeDistanceMeasure, Map<String, List<String>> wordTreeHierarchy,
+      Set<String> dict) {
 
     // Initialise word processor variables
     Queue<String> wordQueue = new LinkedList<String>();
@@ -73,16 +65,20 @@ public class WordWalk {
     }
   }
 
-  private static void backtrackSearchTreeForShortestRoute(String start, String end,
-      Map<String, Integer> wordTreeDistanceMeasure, Map<String, ArrayList<String>> wordTreeHierarchy,
+  private void backtrackSearchTreeForShortestRoute(String start, String end,
+      Map<String, Integer> wordTreeDistanceMeasure, Map<String, List<String>> wordTreeHierarchy,
       ArrayList<String> path, List<List<String>> rst) {
+    // Recursive function
     path.add(end);
     if (end.equals(start)) {
       Collections.reverse(path);
       rst.add(new ArrayList<String>(path));
       Collections.reverse(path);
     } else {
-      for (String s : wordTreeHierarchy.get(end)) { // start back from all adjacent words of the end target
+      for (String s : wordTreeHierarchy.get(end)) {
+        // Start back from all adjacent words of the end target
+        // Only check routes that are on a closer distance to the start from the given
+        // end word
         if (wordTreeDistanceMeasure.get(end) == wordTreeDistanceMeasure.get(s) + 1) {
           backtrackSearchTreeForShortestRoute(start, s, wordTreeDistanceMeasure, wordTreeHierarchy, path, rst);
         }
@@ -91,7 +87,7 @@ public class WordWalk {
     path.remove(path.size() - 1);
   }
 
-  public static ArrayList<String> getAdjacentWords(String word, Set<String> dict) {
+  protected ArrayList<String> getAdjacentWords(String word, Set<String> dict) {
     ArrayList<String> list = new ArrayList<String>();
     for (int i = 0; i < word.length(); i++) {
       char[] currCharArr = word.toCharArray();
@@ -104,7 +100,6 @@ public class WordWalk {
         }
       }
     }
-
     return list;
   }
 

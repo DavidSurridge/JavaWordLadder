@@ -7,22 +7,24 @@ import java.io.IOException;
 import java.util.HashSet;
 
 public class DictionarySingleton {
-  private static HashSet<String> dict = new HashSet<String>();
+
+  private static DictionarySingleton dictionary = null;
+  private HashSet<String> dict = new HashSet<>();
 
   private DictionarySingleton() {
-
+    loadDictionary();
   }
 
   public static HashSet<String> getDictionary() {
 
-    if (dict.isEmpty()) {
-      loadDictionary();
+    if (dictionary == null) {
+      dictionary = new DictionarySingleton();
     }
 
-    return new HashSet<String>(dict);
+    return new HashSet<String>(dictionary.dict);
   }
 
-  private static void loadDictionary() {
+  private void loadDictionary() {
     File file = new File("words.txt");
 
     try (FileReader fileReader = new FileReader(file); BufferedReader bufferedReader = new BufferedReader(fileReader)) {
