@@ -1,9 +1,7 @@
-
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import codeChallenges.WordWalk;
+import com.dsurridge.codeChallenges.WordWalk;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

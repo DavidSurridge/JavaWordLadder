@@ -1,4 +1,4 @@
-package codeChallenges;
+package com.dsurridge.codeChallenges;
 
 import java.util.ArrayList;
 import java.util.Collections;

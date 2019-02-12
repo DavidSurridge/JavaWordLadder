@@ -1,7 +1,7 @@
 package com.dsurridge.controller;
 
 import java.util.HashSet;
-import codeChallenges.WordWalk;
+import com.dsurridge.codeChallenges.WordWalk;
 import com.dsurridge.codeChallenges.DictionarySingleton;
 
 public class Application {
